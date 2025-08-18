@@ -1,0 +1,6 @@
+@SplitBill_HostAddress = http://localhost:5100
+
+GET {{SplitBill_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
