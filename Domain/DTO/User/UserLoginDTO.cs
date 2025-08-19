@@ -3,9 +3,9 @@
 namespace Domain.DTO.User
 {
     public record UserLoginDTO(
-        [Required] 
+        [Required]
         string username,
-        [Required] 
+        [Required]
         string password
         )
     { }

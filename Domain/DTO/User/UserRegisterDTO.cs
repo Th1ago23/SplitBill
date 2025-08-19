@@ -16,6 +16,8 @@ namespace Domain.DTO.User
 
         [Required]
         string Fullname,
+        [Required]
+        DateTime BirthDay,
 
         [Required]
         string PhoneNumber

@@ -7,7 +7,7 @@ namespace Domain.Interface.Repository
         Task Add(User user);
         Task Update(User user);
         Task Delete(int id);
-        Task<User> Find (int id);
+        Task<User> Find(int id);
         Task<IEnumerable<User>> FindAll();
         //Task<User> FindInContext();
 

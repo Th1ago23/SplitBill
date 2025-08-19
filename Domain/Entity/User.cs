@@ -7,22 +7,52 @@ namespace Domain.Entity
     public class User
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public int Id { get; set; }
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-        
+
         public byte[] PasswordHash { get; set; }
         [Required]
         public string Username { get; set; }
 
         public string FullName { get; set; }
 
-        public DateTime BirthdayDate { get; set; }
+        public DateTime Birthday { get; private set; }
 
-        public virtual ICollection<Group>? Groups { get; set; }
-        public virtual ICollection<Expense>? ParticipatedInExpenses { get; set; }
+        [NotMapped]
+        public int Age
+        {
+            get
+            {
+                var today = DateTime.Today;
+                var age = today.Year - Birthday.Year;
+                if (Birthday.Date > today.AddYears(-age))
+                {
+                    age--;
+                }
+                return age;
+            }
+        }
+        public bool HasMinimumAge()
+        {
+            const int minimumAge = 12;
+            return Age >= minimumAge;
+        }
+
+        public virtual ICollection<Group> Groups { get; set; } = new List<Group>();
+        public virtual ICollection<Expense> ParticipatedInExpenses { get; set; } = new List<Expense>();
+
+        public User(string name, string username, string email, byte[] passwordHash, DateTime birthday)
+        {
+            name = FullName;
+            username = Username;
+            email = Email;
+            passwordHash = PasswordHash;
+            birthday = Birthday;
+        }
+        private User()
+        { }
 
     }
 }

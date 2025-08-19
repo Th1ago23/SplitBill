@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.DTO.User;
 
 namespace Domain.DTO.Expense
 {
-    internal class ExpenseDetailDTO
-    {
-    }
+    public record ExpenseDetailDTO(string description, double value, DateTime date, UserSummaryDTO user, List<UserSummaryDTO> users)
+    { }
 }

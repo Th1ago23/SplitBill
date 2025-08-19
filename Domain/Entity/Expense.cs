@@ -9,7 +9,7 @@ namespace Domain.Entity
         public int Id { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal Value { get; set; }
-
+        public string Description { get; set; }
         public DateTime Date { get; set; }
 
         public int PaidByUserId { get; set; }

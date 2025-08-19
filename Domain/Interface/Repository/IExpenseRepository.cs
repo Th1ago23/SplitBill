@@ -1,9 +1,4 @@
 ﻿using Domain.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Interface.Repository
 {
@@ -13,6 +8,6 @@ namespace Domain.Interface.Repository
         Task Update(Expense expense);
         Task Delete(int id);
         Task<Expense> Find(int id);
-        
+
     }
 }
