@@ -1,0 +1,133 @@
+DTOS
+
+1. Grupos (Groups)
+Para CRIAR um grupo:
+
+Nome Sugerido: GroupCreateDto
+
+Quando Usar: No endpoint POST /api/groups.
+
+Quais Campos Incluir: Apenas o que o usuário precisa enviar para criar um grupo.
+
+Name (o nome do grupo).
+
+Para LISTAR os grupos de um usuário (em um dashboard):
+
+Nome Sugerido: GroupSummaryDto ou GroupListDto
+
+Quando Usar: No endpoint GET /api/groups.
+
+Quais Campos Incluir: Apenas a informação resumida para mostrar numa lista.
+
+Id (para poder navegar até ele).
+
+Name.
+
+Para exibir os DETALHES de um grupo:
+
+Nome Sugerido: GroupDetailDto
+
+Quando Usar: No endpoint GET /api/groups/{id}.
+
+Quais Campos Incluir: Todas as informações relevantes daquele grupo.
+
+Id
+
+Name
+
+Uma lista de UserSummaryDto (veremos abaixo) com os membros do grupo.
+
+Uma lista de ExpenseSummaryDto (veremos abaixo) com as despesas do grupo.
+
+2. Despesas (Expenses)
+Para CRIAR uma despesa (o DTO mais importante!):
+
+Nome Sugerido: ExpenseCreateDto
+
+Quando Usar: No endpoint POST /api/groups/{groupId}/expenses.
+
+Quais Campos Incluir: Tudo que o frontend precisa enviar para registrar um novo gasto.
+
+Description (ex: "Pizza de Sexta").
+
+Value (o valor total).
+
+Date (a data da despesa).
+
+PaidByUserId (o ID do usuário que pagou).
+
+Uma lista de IDs dos usuários que participaram: List<int> ParticipantIds.
+
+Para exibir os DETALHES de uma despesa:
+
+Nome Sugerido: ExpenseDetailDto
+
+Quando Usar: No endpoint GET /api/expenses/{id}.
+
+Quais Campos Incluir: Informações detalhadas e formatadas para exibição.
+
+Id
+
+Description
+
+Value
+
+Date
+
+Um UserSummaryDto para o pagador (Payer).
+
+Uma lista de UserSummaryDto para os participantes.
+
+Para LISTAR despesas (dentro da página de um grupo):
+
+Nome Sugerido: ExpenseSummaryDto
+
+Quando Usar: Como parte do GroupDetailDto.
+
+Quais Campos Incluir: Um resumo rápido de cada despesa.
+
+Id
+
+Description
+
+Value
+
+PayerName (apenas o nome de quem pagou).
+
+3. Usuários (Users) - Para Exibição
+Você nunca vai expor sua entidade User completa. Por isso, precisa de DTOs seguros para mostrar informações de usuários.
+
+Para exibir informações RESUMIDAS de um usuário (em listas):
+
+Nome Sugerido: UserSummaryDto (você vai reutilizar este em vários lugares!)
+
+Quando Usar: Dentro de GroupDetailDto, ExpenseDetailDto, etc.
+
+Quais Campos Incluir: Apenas o essencial e público.
+
+Id
+
+Name
+
+Para a resposta do Login/Registro ou para uma página de "Meu Perfil":
+
+Nome Sugerido: UserDetailDto ou AuthResponseDto
+
+Quando Usar: Como resposta de um login/registro bem-sucedido ou no endpoint GET /api/users/me.
+
+Quais Campos Incluir: Informações do usuário logado (sempre sem a senha!).
+
+Id
+
+Name
+
+Email
+
+O Token JWT (no caso da resposta de login/registro).
+
+Dica de Ouro: Pense em "Entrada" e "Saída"
+É uma ótima prática separar seus DTOs em duas categorias:
+
+DTOs de Entrada (Request): Usados para criar ou atualizar dados. Geralmente têm menos campos e podem incluir validações ([Required], [MaxLength], etc.). Ex: GroupCreateDto, ExpenseCreateDto.
+
+DTOs de Saída (Response): Usados para retornar dados ao cliente. Geralmente têm mais campos, são formatados para exibição e nunca contêm dados sensíveis. Ex: GroupDetailDto, ExpenseDetailDto.
