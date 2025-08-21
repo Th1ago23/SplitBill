@@ -8,6 +8,7 @@ namespace Domain.Interface.Service
         Task<GroupSummaryDTO> GetGroupWithUsers(int id);
         Task<GroupResponseDTO> UpdateGroupName(string groupName, int id);
         Task<GroupSummaryDTO> DeleteUserFromGroup(string email);
+        Task<GroupSummaryDTO> RenameGroup (int groupId, string newName);
 
     }
 }

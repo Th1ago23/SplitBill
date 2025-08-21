@@ -1,15 +1,15 @@
 ﻿using Domain.Entity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infraestructure.Database
+namespace Infrastructure.Database
 {
     public class DbConfig : DbContext
     {
         public DbConfig(DbContextOptions<DbConfig> options) : base(options) { }
 
-        DbSet<User> Users { get; set; }
-        DbSet<Group> Groups { get; set; }
-        DbSet<Expense> Expenses { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
