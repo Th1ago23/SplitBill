@@ -2,30 +2,23 @@
 using Domain.DTO.Group;
 using Domain.DTO.User;
 using Domain.Interface.Context;
+using Domain.Interface.Mapper.GroupMapper;
 using Domain.Interface.Mapper.UserMapper;
 using Domain.Interface.Repository;
-using Domain.Interface.Utils;
+using Domain.Interface.Service;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Service
 {
-    public class GroupService
+    public class GroupService:IGroupService
     {
         private readonly IGroupRepository _gr;
         private readonly IUserRepository _ur;
         private readonly ICurrentUserService _acessor;
-        private readonly GroupMP _mapper;
-        private readonly IUserMP _userMapper;
+        private readonly IGroupMP _mapper;
     
-    
-        public GroupService(IUserMP userMapper, GroupMP mapper ,IGroupRepository gr, IUserRepository ur, ICurrentUserService acessor)
+        public GroupService(IGroupMP mapper ,IGroupRepository gr, IUserRepository ur, ICurrentUserService acessor)
         {
-            _userMapper = userMapper;
             _mapper = mapper;
             _gr = gr;
             _ur = ur;

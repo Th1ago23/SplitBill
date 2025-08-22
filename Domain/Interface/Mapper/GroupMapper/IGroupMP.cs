@@ -1,6 +1,5 @@
 ﻿using Domain.DTO.Group;
 using Domain.Entity;
-using Domain.Interface.Utils;
 
 namespace Domain.Interface.Mapper.GroupMapper
 {

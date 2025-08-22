@@ -4,11 +4,10 @@ namespace Domain.Interface.Service
 {
     public interface IGroupService
     {
-        Task<GroupResponseDTO> GroupCreate(GroupCreateDTO dto);
-        Task<GroupSummaryDTO> GetGroupWithUsers(int id);
-        Task<GroupResponseDTO> UpdateGroupName(string groupName, int id);
-        Task<GroupSummaryDTO> DeleteUserFromGroup(string email);
-        Task<GroupSummaryDTO> RenameGroup (int groupId, string newName);
+
+        public Task<GroupResponseDTO> CreateGroup(GroupCreateDTO dto);
+        public Task<GroupSummaryDTO> AddMember(string gpName, string userEmail);
+
 
     }
 }

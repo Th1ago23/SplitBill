@@ -1,7 +1,11 @@
 using Application.Service;
+using Application.Service.ContextUser;
 using Application.Service.JWT;
+using Application.Service.Mapper.GroupMapper;
 using Application.Service.Mapper.UserMapper;
 using Application.Utils.Validator;
+using Domain.Interface.Context;
+using Domain.Interface.Mapper.GroupMapper;
 using Domain.Interface.Mapper.UserMapper;
 using Domain.Interface.Repository;
 using Domain.Interface.Service;
@@ -25,6 +29,10 @@ builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 builder.Services.AddScoped<IUserMP, UserMP>();
 builder.Services.AddScoped<IObjectValidator, ObjectValidator>();
+builder.Services.AddScoped<IGroupMP, GroupMP>();
+
+builder.Services.AddScoped<IGroupService, GroupService>();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 
 builder.Services.AddHttpContextAccessor();
@@ -89,7 +97,7 @@ builder.Services.AddCors(options =>
 });
 
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
