@@ -7,7 +7,7 @@ namespace Domain.Interface.Repository
         Task Add(Expense expense);
         Task Update(Expense expense);
         Task Delete(int id);
-        Task<Expense> Find(int id);
+        IQueryable<Expense> Get();
 
     }
 }

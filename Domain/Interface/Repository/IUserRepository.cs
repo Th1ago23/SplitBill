@@ -4,12 +4,10 @@ namespace Domain.Interface.Repository
 {
     public interface IUserRepository
     {
-        Task Add(User user);
-        Task Update(User user);
-        Task Delete(int id);
-        Task<User> Find(int id);
-        Task<IEnumerable<User>> FindAll();
-        //Task<User> FindInContext();
+        public Task Add(User user);
+        public Task Update(User user);
+        public Task Delete(int id);
+        public IQueryable<User> Find();
 
     }
 }

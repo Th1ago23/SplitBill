@@ -4,7 +4,8 @@ namespace Domain.DTO.User
 {
     public record UserLoginDTO(
         [Required]
-        string username,
+        string email,
+
         [Required]
         string password
         )

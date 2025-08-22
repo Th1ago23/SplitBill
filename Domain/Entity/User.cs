@@ -12,7 +12,7 @@ namespace Domain.Entity
         [EmailAddress]
         public string Email { get; set; }
 
-        public byte[] PasswordHash { get; set; }
+        public string PasswordHash { get; set; }
         [Required]
         public string Username { get; set; }
 
@@ -43,7 +43,7 @@ namespace Domain.Entity
         public virtual ICollection<Group> Groups { get; set; } = new List<Group>();
         public virtual ICollection<Expense> ParticipatedInExpenses { get; set; } = new List<Expense>();
 
-        public User(string name, string username, string email, byte[] passwordHash, DateTime birthday)
+        public User(string name, string username, string email, string passwordHash, DateTime birthday)
         {
             name = FullName;
             username = Username;
@@ -51,7 +51,7 @@ namespace Domain.Entity
             passwordHash = PasswordHash;
             birthday = Birthday;
         }
-        private User()
+        public User()
         { }
 
     }

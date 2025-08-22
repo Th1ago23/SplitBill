@@ -1,4 +1,5 @@
-﻿using Domain.Interface.Context;
+﻿#pragma warning disable IDE0290
+using Domain.Interface.Context;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
