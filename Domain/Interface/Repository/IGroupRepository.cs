@@ -7,9 +7,9 @@ namespace Domain.Interface.Repository
     public interface IGroupRepository
     {
         public Task<bool> Create(Group gp);
-        public Task Update(Group gp);
+        public void Update(Group gp);
         public Task Rename(string newName, Group gp);
-        public Task Delete(int id);
+        public void Delete(Group gp);
         public IQueryable<Group> Find();
     }
 }

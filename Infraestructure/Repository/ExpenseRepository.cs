@@ -18,22 +18,19 @@ namespace Infrastructure.Repository
 
         public async Task Add(Expense ex)
         {
-            _context
-                .Expenses
-                .Add(ex);
-            
             await _context
-                    .SaveChangesAsync();
+                        .Expenses
+                        .AddAsync(ex);
+            
+            
         }
 
-        public async Task Update(Expense ex)
+        public void Update(Expense ex)
         {
             _context
                 .Expenses
                 .Update(ex);
             
-            await _context
-                    .SaveChangesAsync();
         }
 
         public async Task Delete (int id)
@@ -42,6 +39,7 @@ namespace Infrastructure.Repository
                                     .Expenses
                                     .FirstOrDefaultAsync(i => i.Id == id)
                                     ?? throw new NullReferenceException($"Não foram encontrados nenhuma despesa com o ID {id}.");
+            _context.Remove(expense);
         }
 
         public IQueryable<Expense> Get()

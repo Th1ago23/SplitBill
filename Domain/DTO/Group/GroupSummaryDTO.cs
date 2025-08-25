@@ -2,6 +2,6 @@
 
 namespace Domain.DTO.Group
 {
-    public record GroupSummaryDTO(string name, ICollection<UserSummaryDTO> users)
+    public record GroupSummaryDTO(string name, int leaderId,ICollection<UserSummaryDTO> users, bool isPublic)
     { }
 }

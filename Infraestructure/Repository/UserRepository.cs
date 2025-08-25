@@ -22,18 +22,14 @@ namespace Infrastructure.Repository
                     .Users
                     .AddAsync(user);
             
-            await _context
-                    .SaveChangesAsync();
         }
 
-        public async Task Update(User user)
+        public void Update(User user)
         {
             _context
                 .Users
                 .Update(user);
             
-            await _context
-                .SaveChangesAsync();
         }
 
         public async Task Delete(int id)
@@ -42,7 +38,9 @@ namespace Infrastructure.Repository
                                 .Users
                                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (user == null) throw new NullReferenceException(nameof(user)); 
+            if (user == null) throw new NullReferenceException(nameof(user));
+
+            _context.Remove(user);
         }
 
         public IQueryable<User> Find()

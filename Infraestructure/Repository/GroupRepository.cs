@@ -36,19 +36,13 @@ namespace Infrastructure.Repository
             if (gp1 == null) throw new NullReferenceException(nameof(gp1));
 
             gp1.Name = newName;
-
-            await _context
-                        .SaveChangesAsync();
         }
 
-        public async Task Update (Group gp)
+        public void Update (Group gp)
         {
             _context
                 .Groups
                 .Update(gp);
-            
-            await _context
-                        .SaveChangesAsync();
         }
 
         public IQueryable<Group> Find ()
@@ -58,17 +52,10 @@ namespace Infrastructure.Repository
                         .AsQueryable();
         }
 
-        public async Task Delete (int id)
+        public void Delete (Group gp)
         {
-            var group = await _context
-                                    .Groups
-                                    .FirstOrDefaultAsync(i => i.Id ==id) 
-                                    ?? throw new NullReferenceException();
-            _context
-                .Remove(group);
-        
-            await _context
-                    .SaveChangesAsync();
+            _context.Remove(gp);
+
         }
         
     }

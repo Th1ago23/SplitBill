@@ -1,24 +1,24 @@
-﻿using Application.Service.Mapper.GroupMapper;
-using Domain.DTO.Group;
-using Domain.DTO.User;
+﻿using Domain.DTO.Group;
 using Domain.Interface.Context;
+using Domain.Interface.Database;
 using Domain.Interface.Mapper.GroupMapper;
-using Domain.Interface.Mapper.UserMapper;
 using Domain.Interface.Repository;
 using Domain.Interface.Service;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Service
 {
-    public class GroupService:IGroupService
+    public class GroupService : IGroupService
     {
         private readonly IGroupRepository _gr;
         private readonly IUserRepository _ur;
         private readonly ICurrentUserService _acessor;
         private readonly IGroupMP _mapper;
-    
-        public GroupService(IGroupMP mapper ,IGroupRepository gr, IUserRepository ur, ICurrentUserService acessor)
+        private readonly IUnitOfWork _uow;
+
+        public GroupService(IUnitOfWork uow, IGroupMP mapper, IGroupRepository gr, IUserRepository ur, ICurrentUserService acessor)
         {
+            _uow = uow;
             _mapper = mapper;
             _gr = gr;
             _ur = ur;
@@ -38,39 +38,131 @@ namespace Application.Service
                                 .Find()
                                 .FirstOrDefaultAsync(i => i.Id == currentUser.Value)
                                 ?? throw new NullReferenceException();
-            
+
             gpzada.Users.Add(user);
+            gpzada.LeaderId = user.Id;
 
 
-            await _gr.Update(gpzada);
+            await _gr.Create(gpzada);
 
+            await _uow.CommitAsync();
+            
             return _mapper.ToDTO(gpzada);
 
         }
-
-        public async Task<GroupSummaryDTO> AddMember (string gpName, string userEmail)
+        public async Task<string> GetGroupName (int id)
         {
             var gp = await _gr
                             .Find()
-                            .FirstOrDefaultAsync(i => i.Name == gpName)
-                            ?? throw new NullReferenceException("Grupo não encontrado.");
+                            .FirstOrDefaultAsync(i=> i.Id == id)
+                            ?? throw new NullReferenceException("Grupo não encontrado");
+
+            return gp.Name;
+        }
+
+        public async Task<GroupSummaryDTO> AddMember(int gpId, string userEmail)
+        {
+
+            var userId = _acessor.UserId;
+
             var user = await _ur
                                 .Find()
-                                .FirstOrDefaultAsync(i => i.Email == userEmail)
-                                ?? throw new NullReferenceException("Usuario não encontrado.");
+                                .FirstOrDefaultAsync(i => i.Id == userId)
+                                ?? throw new NullReferenceException();
 
-            gp.Users.Add(user);
+            var group = await _gr
+                                 .Find()
+                                 .Include(f => f.Users)
+                                 .FirstOrDefaultAsync(i => i.Id == gpId)
+                                 ?? throw new NullReferenceException();
 
-            await _gr.Update(gp);
+            if (!group.Users.Any(i => i.Id == user.Id)) throw new ArgumentException("Usuário sem permissão");
 
-            var membersDTOS = new List<UserSummaryDTO>();
+            var userToAdd = await _ur
+                                    .Find()
+                                    .FirstOrDefaultAsync(i => i.Email == userEmail)
+                                    ?? throw new ArgumentException("Usuário não encontrado");
 
-            foreach(var u in gp.Users)
-            {
-                membersDTOS.Add(new UserSummaryDTO(u.FullName));
-            }
 
-            return new GroupSummaryDTO(gp.Name, membersDTOS);
+            group.Users.Add(userToAdd);
+
+            await _uow.CommitAsync();
+
+            return _mapper.ToSummary(group);
+
         }
+
+        public async Task<GroupSummaryDTO> RemoveMember (int groupId, int userToRemoveId)
+        {
+            var userInContext = _acessor.UserId;
+
+            var user = await _ur
+                                .Find()
+                                .FirstOrDefaultAsync(i => i.Id == userInContext)
+                                ?? throw new NullReferenceException();
+
+            var userToRemove = await _ur
+                                        .Find()
+                                        .FirstOrDefaultAsync(i => i.Id == userToRemoveId)
+                                        ?? throw new NullReferenceException();
+
+            var gp = await _gr
+                            .Find()
+                            .Include(f => f.Users)
+                            .FirstOrDefaultAsync(i => i.Id == groupId)
+                            ?? throw new NullReferenceException();
+
+            if (user.Id != gp.LeaderId) throw new ArgumentException("Usuário sem permissão");
+
+            gp.Users.Remove(userToRemove);
+            
+            await _uow.CommitAsync();
+
+            return _mapper.ToSummary(gp);
+        }
+
+        public async Task<bool> DeleteGroup(int groupId)
+        {
+            var userInContext = _acessor.UserId;
+
+            var group = await _gr
+                                .Find()
+                                .FirstOrDefaultAsync(f => f.Id == groupId)
+                                ?? throw new ArgumentNullException("Grupo não encontrado");
+
+            if (group.LeaderId != userInContext) throw new ArgumentException("Sem acesso para excluir grupo");
+
+
+            if (group.Users.Any())
+            {
+                return false;
+                throw new ArgumentException("Não é possível remover grupos contendo participantes.");
+            }
+            _gr.Delete(group);
+
+            await _uow.CommitAsync();
+            return true;
+        }
+
+        public async Task<GroupSummaryDTO> RenameGroup (string newName, int groupId)
+        {
+            var userInContext = _acessor.UserId;
+
+            var group = await _gr
+                                .Find()
+                                .Include(i => i.Users)
+                                .FirstOrDefaultAsync(f => f.Id == groupId)
+                                ?? throw new NullReferenceException();
+
+            if (group.LeaderId != userInContext) throw new ArgumentException("Usuário sem permissão");
+            
+            group.Name = newName;
+
+            await _uow.CommitAsync();
+            return _mapper.ToSummary(group);
+        
+        
+        }
+
     }
 }

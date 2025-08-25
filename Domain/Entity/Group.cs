@@ -9,6 +9,8 @@ namespace Domain.Entity
         [Required]
         [StringLength(75, ErrorMessage = "Nome do grupo deve conter até 75 caracteres.")]
         public string Name { get; set; }
+        public int LeaderId { get; set; }
+        public bool IsPublic { get; set; }
         public ICollection<User> Users { get; set; } = new List<User>();
 
     }

@@ -4,6 +4,7 @@ using Domain.DTO.User;
 using Domain.Entity;
 using Domain.Interface.Mapper.UserMapper;
 using Domain.Interface.Utils;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Application.Service.Mapper.UserMapper
 {
@@ -64,7 +65,7 @@ namespace Application.Service.Mapper.UserMapper
             _validator.Validate(user);
             return new UserSummaryDTO(user.FullName);
         }
-
-
+        
+        
     }
 }

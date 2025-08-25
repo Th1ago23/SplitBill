@@ -1,5 +1,6 @@
 ﻿using Domain.DTO.Group;
 using Domain.Interface.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SplitBill.Controllers
@@ -15,7 +16,8 @@ namespace SplitBill.Controllers
             _service = service;
         }
 
-        [HttpPost("GroupCreate")]
+        [Authorize]
+        [HttpPost("GroupCreate")]       
         public IActionResult CreateGroup (GroupCreateDTO request)
         {
             _service.CreateGroup(request);
@@ -28,6 +30,24 @@ namespace SplitBill.Controllers
                 message = "Grupo criado com sucesso!"
             });
         
+        }
+
+        [Authorize]
+        [HttpPost()]
+        public IActionResult AddMember (int gpId, string userEmail)
+        {         
+            _service.AddMember(gpId, userEmail);
+            var gpName = _service.GetGroupName(gpId);
+
+
+            return CreatedAtAction("Add member",
+                new
+                {
+                    groupName = gpName,
+                    usEmail = userEmail,
+                    message = "Usuário adicionado ao grupo com sucesso!"
+                });
+                      
         }
     }
 }
