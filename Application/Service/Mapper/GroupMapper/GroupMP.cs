@@ -48,6 +48,8 @@ namespace Application.Service.Mapper.GroupMapper
             return new GroupSummaryDTO(gp.Name,gp.LeaderId, membersDTO, gp.IsPublic);
         }
 
+       
+
 
         
     }

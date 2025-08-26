@@ -1,7 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.DTO.User;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.DTO.Expense
 {
-    public record ExpenseCreateDTO([Required] double value, [Required] string description, DateTime Date, int? PaidByUserId, List<int?> ParticipantsId)
+    public record ExpenseCreateDTO([Required] decimal value, [Required] string description, DateTime Date, int? PaidByUserId, ICollection<int> ParticipantsIds)
     { }
 }

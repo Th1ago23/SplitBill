@@ -42,7 +42,7 @@ namespace Infrastructure.Repository
             _context.Remove(expense);
         }
 
-        public IQueryable<Expense> Get()
+        public IQueryable<Expense> Find()
         {
             return _context
                         .Expenses

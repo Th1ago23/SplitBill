@@ -5,6 +5,7 @@ using Application.Service.Mapper.GroupMapper;
 using Application.Service.Mapper.UserMapper;
 using Application.Utils.Validator;
 using Domain.Interface.Context;
+using Domain.Interface.Database;
 using Domain.Interface.Mapper.GroupMapper;
 using Domain.Interface.Mapper.UserMapper;
 using Domain.Interface.Repository;
@@ -30,7 +31,7 @@ builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 builder.Services.AddScoped<IUserMP, UserMP>();
 builder.Services.AddScoped<IObjectValidator, ObjectValidator>();
 builder.Services.AddScoped<IGroupMP, GroupMP>();
-
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 

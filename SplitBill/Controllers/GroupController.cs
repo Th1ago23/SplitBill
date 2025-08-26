@@ -33,11 +33,11 @@ namespace SplitBill.Controllers
         }
 
         [Authorize]
-        [HttpPost()]
-        public IActionResult AddMember (int gpId, string userEmail)
+        [HttpPost("{groupId}/AddMember/{userEmail}", Name ="Add Member")]
+        public IActionResult AddMember (int groupId, string userEmail)
         {         
-            _service.AddMember(gpId, userEmail);
-            var gpName = _service.GetGroupName(gpId);
+            _service.AddMember(groupId, userEmail);
+            var gpName = _service.GetGroupName(groupId);
 
 
             return CreatedAtAction("Add member",
@@ -46,8 +46,43 @@ namespace SplitBill.Controllers
                     groupName = gpName,
                     usEmail = userEmail,
                     message = "Usuário adicionado ao grupo com sucesso!"
-                });
-                      
+                });                      
+        }
+
+        [Authorize]
+        [HttpGet("GetGroupName", Name="Get Group Name")]
+        public IActionResult GetGroupName(int gpId)
+        {
+            var gpName = _service.GetGroupName(gpId);
+
+            return Ok(gpName);
+        }
+
+        [Authorize]
+        [HttpDelete("{groupId}/RemoveMember/{userToRemoveId}", Name ="Remove Member")]
+        public IActionResult RemoveMember(int groupId, int userToRemoveId)
+        {
+            _service.RemoveMember(groupId, userToRemoveId);
+
+            return NoContent();
+        }
+
+        [Authorize]
+        [HttpDelete("DeleteGroup/{groupId}", Name ="Delete Group")]
+        public IActionResult DeleteGroup(int groupId)
+        {
+            _service.DeleteGroup(groupId);
+
+            return NoContent();
+        }
+
+        [Authorize]
+        [HttpPatch("{groupId}/RenameGroup")]
+        public IActionResult RenameGroup(string newName, int groupId)
+        {
+            var name = _service.RenameGroup(newName, groupId);
+
+            return Ok(name);
         }
     }
 }

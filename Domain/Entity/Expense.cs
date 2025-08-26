@@ -12,7 +12,7 @@ namespace Domain.Entity
         public string Description { get; set; }
         public DateTime Date { get; set; }
 
-        public int PaidByUserId { get; set; }
+        public int? PaidByUserId { get; set; }
         public int GroupId { get; set; }
 
         [ForeignKey("PaidByUserId")]
