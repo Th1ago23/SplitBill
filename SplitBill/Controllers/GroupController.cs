@@ -18,25 +18,25 @@ namespace SplitBill.Controllers
 
         [Authorize]
         [HttpPost("GroupCreate")]
-        public IActionResult CreateGroup(GroupCreateDTO request)
+        public async Task<IActionResult> CreateGroup(GroupCreateDTO request)
         {
-            _service.CreateGroup(request);
+            await _service.CreateGroup(request);
 
             if (request == null) BadRequest("Não foi possível criar um grupo.");
 
-            return CreatedAtAction("Create Group", new
+            return Created("api/groups", new
             {
                 group = request,
-                message = "Grupo criado com sucesso!"
+                message = "Grupo criado com sucesso!!"
             });
 
         }
 
         [Authorize]
         [HttpPost("{groupId}/AddMember/{userEmail}", Name = "Add Member")]
-        public IActionResult AddMember(int groupId, string userEmail)
+        public async Task<IActionResult> AddMember(int groupId, string userEmail)
         {
-            _service.AddMember(groupId, userEmail);
+            await _service.AddMember(groupId, userEmail);
             var gpName = _service.GetGroupName(groupId);
 
 
@@ -51,36 +51,36 @@ namespace SplitBill.Controllers
 
         [Authorize]
         [HttpGet("GetGroupName", Name = "Get Group Name")]
-        public IActionResult GetGroupName(int gpId)
+        public async Task<IActionResult> GetGroupName(int gpId)
         {
-            var gpName = _service.GetGroupName(gpId);
+            var gpName = await _service.GetGroupName(gpId);
 
             return Ok(gpName);
         }
 
         [Authorize]
         [HttpDelete("{groupId}/RemoveMember/{userToRemoveId}", Name = "Remove Member")]
-        public IActionResult RemoveMember(int groupId, int userToRemoveId)
+        public async Task<IActionResult> RemoveMember(int groupId, int userToRemoveId)
         {
-            _service.RemoveMember(groupId, userToRemoveId);
+            await _service.RemoveMember(groupId, userToRemoveId);
 
             return NoContent();
         }
 
         [Authorize]
         [HttpDelete("DeleteGroup/{groupId}", Name = "Delete Group")]
-        public IActionResult DeleteGroup(int groupId)
+        public async Task<IActionResult> DeleteGroup(int groupId)
         {
-            _service.DeleteGroup(groupId);
+            await _service.DeleteGroup(groupId);
 
             return NoContent();
         }
 
         [Authorize]
         [HttpPatch("{groupId}/RenameGroup")]
-        public IActionResult RenameGroup(string newName, int groupId)
+        public async Task<IActionResult> RenameGroup(string newName, int groupId)
         {
-            var name = _service.RenameGroup(newName, groupId);
+            var name = await _service.RenameGroup(newName, groupId);
 
             return Ok(name);
         }

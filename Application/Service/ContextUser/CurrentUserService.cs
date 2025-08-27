@@ -1,4 +1,5 @@
 ﻿#pragma warning disable IDE0290
+using Domain.Entity;
 using Domain.Interface.Context;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
@@ -20,9 +21,13 @@ namespace Application.Service.ContextUser
             {
                 var userIdClaim = _acessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                if (userIdClaim != null && int.TryParse(userIdClaim, out var userId)) return userId;
+                if (string.IsNullOrEmpty(userIdClaim))
+                    throw new UnauthorizedAccessException("Usuário não autenticado ou token inválido.");
 
-                return null;
+                if (!int.TryParse(userIdClaim, out int userId))
+                    throw new UnauthorizedAccessException("Claim de usuário inválida no token.");
+
+                return userId;
             }
         }
 
