@@ -16,22 +16,26 @@ namespace SplitBill.Controllers
         }
 
         [HttpPost("Login")]
-        public IActionResult Login(UserLoginDTO request)
+        public async Task<IActionResult> Login(UserLoginDTO request)
         {
             if (request == null) return BadRequest("É necessário inserir todos os dados.");
 
-            return Ok(_service.Login(request));
+            var token = await _service.Login(request);
+
+            return Ok(token);
         }
 
         [HttpPost("Register")]
-        public IActionResult Register(UserRegisterDTO request)
+        public async Task<IActionResult> Register(UserRegisterDTO request)
         {
             if (request == null) return BadRequest("Preencha todos os dados");
-            _service.Register(request);
+            await _service.Register(request);
 
             return CreatedAtAction(
                 "Register",
-                new { message = "Usuário criado com Sucesso." }
+                new { message = "Usuário criado com Sucesso.",
+                    data = request
+                    }
                 );
         }
     }

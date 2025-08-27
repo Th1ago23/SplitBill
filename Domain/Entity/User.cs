@@ -45,11 +45,11 @@ namespace Domain.Entity
 
         public User(string name, string username, string email, string passwordHash, DateTime birthday)
         {
-            name = FullName;
-            username = Username;
-            email = Email;
-            passwordHash = PasswordHash;
-            birthday = Birthday;
+            FullName = name;
+            Username = username;
+            Email = email;
+            PasswordHash = passwordHash;
+            Birthday = birthday;
         }
         public User()
         { }
