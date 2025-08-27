@@ -1,6 +1,4 @@
-﻿using BCrypt.Net;
-using Domain.DTO.User;
-using Domain.Interface.Context;
+﻿using Domain.DTO.User;
 using Domain.Interface.Mapper.UserMapper;
 using Domain.Interface.Repository;
 using Domain.Interface.Service;
@@ -10,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Service
 {
-    public class UserService:IUserService
+    public class UserService : IUserService
     {
         private readonly IUserRepository _repo;
         private readonly IUserMP _mapper;
@@ -44,7 +42,7 @@ namespace Application.Service
             if (await _repo.Find().AnyAsync(i => i.Email == dto.EmailAddress)) throw new Exception("Esse e-mail já foi cadastrado.");
 
             var pass = BCrypt.Net.BCrypt.EnhancedHashPassword(dto.Password);
-            
+
             var user = _mapper.ToUser(dto, pass);
             await _repo.Add(user);
 

@@ -1,7 +1,10 @@
-﻿using Domain.DTO.Group;
+﻿using Domain.DTO.Expense;
+using Domain.DTO.Group;
 using Domain.Interface.Context;
 using Domain.Interface.Database;
+using Domain.Interface.Mapper.ExpenseMapper;
 using Domain.Interface.Mapper.GroupMapper;
+using Domain.Interface.Mapper.UserMapper;
 using Domain.Interface.Repository;
 using Domain.Interface.Service;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +18,13 @@ namespace Application.Service
         private readonly ICurrentUserService _acessor;
         private readonly IGroupMP _mapper;
         private readonly IUnitOfWork _uow;
+        private readonly IUserMP _userMP;
+        private readonly IExpenseMP _expenseMP;
 
-        public GroupService(IUnitOfWork uow, IGroupMP mapper, IGroupRepository gr, IUserRepository ur, ICurrentUserService acessor)
+        public GroupService(IExpenseMP expenseMP, IUserMP userMP, IUnitOfWork uow, IGroupMP mapper, IGroupRepository gr, IUserRepository ur, ICurrentUserService acessor)
         {
+            _expenseMP = expenseMP;
+            _userMP = userMP;
             _uow = uow;
             _mapper = mapper;
             _gr = gr;
@@ -46,15 +53,15 @@ namespace Application.Service
             await _gr.Create(gpzada);
 
             await _uow.CommitAsync();
-            
+
             return _mapper.ToDTO(gpzada);
 
         }
-        public async Task<string> GetGroupName (int id)
+        public async Task<string> GetGroupName(int id)
         {
             var gp = await _gr
                             .Find()
-                            .FirstOrDefaultAsync(i=> i.Id == id)
+                            .FirstOrDefaultAsync(i => i.Id == id)
                             ?? throw new NullReferenceException("Grupo não encontrado");
 
             return gp.Name;
@@ -73,6 +80,7 @@ namespace Application.Service
             var group = await _gr
                                  .Find()
                                  .Include(f => f.Users)
+                                 .Include(f => f.Expenses)
                                  .FirstOrDefaultAsync(i => i.Id == gpId)
                                  ?? throw new NullReferenceException();
 
@@ -88,11 +96,20 @@ namespace Application.Service
 
             await _uow.CommitAsync();
 
-            return _mapper.ToSummary(group);
+
+            var exp = new List<ExpenseDetailDTO>();
+
+            foreach (var expense in group.Expenses)
+            {
+                var dto = new ExpenseDetailDTO(expense.Description, expense.Value, expense.Date, _userMP.ToSummary(expense.Payer), expense.Participants.Select(_userMP.ToSummary).ToList(), _mapper.ToDTO(group));
+                exp.Add(dto);
+            }
+
+            return new GroupSummaryDTO(group.Name, group.LeaderId, group.Users.Select(_userMP.ToSummary).ToList(), group.IsPublic, exp);
 
         }
 
-        public async Task<GroupSummaryDTO> RemoveMember (int groupId, int userToRemoveId)
+        public async Task<GroupSummaryDTO> RemoveMember(int groupId, int userToRemoveId)
         {
             var userInContext = _acessor.UserId;
 
@@ -109,16 +126,26 @@ namespace Application.Service
             var gp = await _gr
                             .Find()
                             .Include(f => f.Users)
+                            .Include(f => f.Expenses)
                             .FirstOrDefaultAsync(i => i.Id == groupId)
                             ?? throw new NullReferenceException();
 
             if (user.Id != gp.LeaderId) throw new ArgumentException("Usuário sem permissão");
 
             gp.Users.Remove(userToRemove);
-            
-            await _uow.CommitAsync();
 
-            return _mapper.ToSummary(gp);
+            await _uow.CommitAsync();
+            var exp = new List<ExpenseDetailDTO>();
+
+            foreach (var expense in gp.Expenses)
+            {
+                var dto = new ExpenseDetailDTO(expense.Description, expense.Value, expense.Date, _userMP.ToSummary(expense.Payer), expense.Participants.Select(_userMP.ToSummary).ToList(), _mapper.ToDTO(gp));
+                exp.Add(dto);
+            }
+
+
+            return new GroupSummaryDTO(gp.Name, gp.LeaderId, gp.Users.Select(_userMP.ToSummary).ToList(), gp.IsPublic,exp);
+
         }
 
         public async Task<bool> DeleteGroup(int groupId)
@@ -144,24 +171,33 @@ namespace Application.Service
             return true;
         }
 
-        public async Task<GroupSummaryDTO> RenameGroup (string newName, int groupId)
+        public async Task<GroupSummaryDTO> RenameGroup(string newName, int groupId)
         {
             var userInContext = _acessor.UserId;
 
             var group = await _gr
                                 .Find()
                                 .Include(i => i.Users)
+                                .Include(i => i.Expenses)
                                 .FirstOrDefaultAsync(f => f.Id == groupId)
                                 ?? throw new NullReferenceException();
 
             if (group.LeaderId != userInContext) throw new ArgumentException("Usuário sem permissão");
-            
+
             group.Name = newName;
 
             await _uow.CommitAsync();
-            return _mapper.ToSummary(group);
-        
-        
+            var novo = new List<ExpenseDetailDTO>();
+
+            foreach(var expense in group.Expenses)
+            {
+                var dto = new ExpenseDetailDTO(expense.Description, expense.Value, expense.Date, _userMP.ToSummary(expense.Payer), expense.Participants.Select(_userMP.ToSummary).ToList(),_mapper.ToDTO(group));
+                novo.Add(dto);
+            }
+
+            return new GroupSummaryDTO(group.Name, group.LeaderId, group.Users.Select(_userMP.ToSummary).ToList(), group.IsPublic, novo);
+
+
         }
 
     }
