@@ -1,14 +1,11 @@
-﻿
-using Application.Utils.Validator;
-using Domain.DTO.User;
+﻿using Domain.DTO.User;
 using Domain.Entity;
 using Domain.Interface.Mapper.UserMapper;
 using Domain.Interface.Utils;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Application.Service.Mapper.UserMapper
 {
-    public class UserMP:IUserMP
+    public class UserMP : IUserMP
     {
         private readonly IObjectValidator _validator;
 
@@ -33,7 +30,7 @@ namespace Application.Service.Mapper.UserMapper
         {
             _validator.Validate(dto);
 
-            return new User(dto.Fullname,dto.Username,dto.EmailAddress,passwordHashed,dto.BirthDay);
+            return new User(dto.Fullname, dto.Username, dto.EmailAddress, passwordHashed, dto.BirthDay);
         }
 
         public User ToUser(UserSummaryDTO dto)
@@ -43,10 +40,10 @@ namespace Application.Service.Mapper.UserMapper
             return new User
             {
                 FullName = dto.Name
-            }; 
+            };
         }
 
-        public UserResponseDTO ToResponse (User user)
+        public UserResponseDTO ToResponse(User user)
         {
             _validator.Validate(user);
 
@@ -65,7 +62,7 @@ namespace Application.Service.Mapper.UserMapper
             _validator.Validate(user);
             return new UserSummaryDTO(user.FullName);
         }
-        
-        
+
+
     }
 }
