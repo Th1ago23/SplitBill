@@ -31,7 +31,7 @@ namespace SplitBill.Controllers
 
             return CreatedAtAction(
                 "Register",
-                new {message = "Usuário criado com Sucesso." }
+                new { message = "Usuário criado com Sucesso." }
                 );
         }
     }

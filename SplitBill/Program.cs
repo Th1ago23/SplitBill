@@ -1,11 +1,13 @@
 using Application.Service;
 using Application.Service.ContextUser;
 using Application.Service.JWT;
+using Application.Service.Mapper.ExpenseMapper;
 using Application.Service.Mapper.GroupMapper;
 using Application.Service.Mapper.UserMapper;
 using Application.Utils.Validator;
 using Domain.Interface.Context;
 using Domain.Interface.Database;
+using Domain.Interface.Mapper.ExpenseMapper;
 using Domain.Interface.Mapper.GroupMapper;
 using Domain.Interface.Mapper.UserMapper;
 using Domain.Interface.Repository;
@@ -34,6 +36,9 @@ builder.Services.AddScoped<IGroupMP, GroupMP>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<IExpenseService, ExpenseService>();
+builder.Services.AddScoped<IExpenseMP, ExpenseMP>();
+
 
 
 builder.Services.AddHttpContextAccessor();
@@ -42,15 +47,15 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
 {
-options.SwaggerDoc("v1", new OpenApiInfo { Title = "Minha API", Version = "v1" });
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Minha API", Version = "v1" });
 
-options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-{
-    In = ParameterLocation.Header,
-    Description = "Insira o token JWT aqui",
-    Name = "Authorization",
-    Type = SecuritySchemeType.ApiKey
-});
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Insira o token JWT aqui",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {

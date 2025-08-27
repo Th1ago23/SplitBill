@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository
 {
-    public class ExpenseRepository:IExpenseRepository
+    public class ExpenseRepository : IExpenseRepository
     {
         private readonly DbConfig _context;
 
@@ -21,8 +21,8 @@ namespace Infrastructure.Repository
             await _context
                         .Expenses
                         .AddAsync(ex);
-            
-            
+
+
         }
 
         public void Update(Expense ex)
@@ -30,15 +30,15 @@ namespace Infrastructure.Repository
             _context
                 .Expenses
                 .Update(ex);
-            
+
         }
 
-        public async Task Delete (int id)
+        public async Task Delete(int id)
         {
-           var expense = await _context
-                                    .Expenses
-                                    .FirstOrDefaultAsync(i => i.Id == id)
-                                    ?? throw new NullReferenceException($"Não foram encontrados nenhuma despesa com o ID {id}.");
+            var expense = await _context
+                                     .Expenses
+                                     .FirstOrDefaultAsync(i => i.Id == id)
+                                     ?? throw new NullReferenceException($"Não foram encontrados nenhuma despesa com o ID {id}.");
             _context.Remove(expense);
         }
 

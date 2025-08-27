@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository
 {
-    public class UserRepository:IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly DbConfig _context;
 
@@ -21,7 +21,7 @@ namespace Infrastructure.Repository
             await _context
                     .Users
                     .AddAsync(user);
-            
+
         }
 
         public void Update(User user)
@@ -29,7 +29,7 @@ namespace Infrastructure.Repository
             _context
                 .Users
                 .Update(user);
-            
+
         }
 
         public async Task Delete(int id)
@@ -48,6 +48,6 @@ namespace Infrastructure.Repository
             return _context.Users.AsQueryable();
         }
 
-        
+
     }
 }

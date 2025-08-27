@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository
 {
-    public class GroupRepository:IGroupRepository
+    public class GroupRepository : IGroupRepository
     {
         private readonly DbConfig _context;
 
@@ -27,7 +27,7 @@ namespace Infrastructure.Repository
             return true;
         }
 
-        public async Task Rename (string newName, Group gp)
+        public async Task Rename(string newName, Group gp)
         {
             var gp1 = await _context
                                 .Groups
@@ -38,25 +38,25 @@ namespace Infrastructure.Repository
             gp1.Name = newName;
         }
 
-        public void Update (Group gp)
+        public void Update(Group gp)
         {
             _context
                 .Groups
                 .Update(gp);
         }
 
-        public IQueryable<Group> Find ()
+        public IQueryable<Group> Find()
         {
             return _context
                         .Groups
                         .AsQueryable();
         }
 
-        public void Delete (Group gp)
+        public void Delete(Group gp)
         {
             _context.Remove(gp);
 
         }
-        
+
     }
 }

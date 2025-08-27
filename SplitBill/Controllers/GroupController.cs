@@ -7,7 +7,7 @@ namespace SplitBill.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GroupController:ControllerBase
+    public class GroupController : ControllerBase
     {
         private readonly IGroupService _service;
 
@@ -17,8 +17,8 @@ namespace SplitBill.Controllers
         }
 
         [Authorize]
-        [HttpPost("GroupCreate")]       
-        public IActionResult CreateGroup (GroupCreateDTO request)
+        [HttpPost("GroupCreate")]
+        public IActionResult CreateGroup(GroupCreateDTO request)
         {
             _service.CreateGroup(request);
 
@@ -29,13 +29,13 @@ namespace SplitBill.Controllers
                 group = request,
                 message = "Grupo criado com sucesso!"
             });
-        
+
         }
 
         [Authorize]
-        [HttpPost("{groupId}/AddMember/{userEmail}", Name ="Add Member")]
-        public IActionResult AddMember (int groupId, string userEmail)
-        {         
+        [HttpPost("{groupId}/AddMember/{userEmail}", Name = "Add Member")]
+        public IActionResult AddMember(int groupId, string userEmail)
+        {
             _service.AddMember(groupId, userEmail);
             var gpName = _service.GetGroupName(groupId);
 
@@ -46,11 +46,11 @@ namespace SplitBill.Controllers
                     groupName = gpName,
                     usEmail = userEmail,
                     message = "Usuário adicionado ao grupo com sucesso!"
-                });                      
+                });
         }
 
         [Authorize]
-        [HttpGet("GetGroupName", Name="Get Group Name")]
+        [HttpGet("GetGroupName", Name = "Get Group Name")]
         public IActionResult GetGroupName(int gpId)
         {
             var gpName = _service.GetGroupName(gpId);
@@ -59,7 +59,7 @@ namespace SplitBill.Controllers
         }
 
         [Authorize]
-        [HttpDelete("{groupId}/RemoveMember/{userToRemoveId}", Name ="Remove Member")]
+        [HttpDelete("{groupId}/RemoveMember/{userToRemoveId}", Name = "Remove Member")]
         public IActionResult RemoveMember(int groupId, int userToRemoveId)
         {
             _service.RemoveMember(groupId, userToRemoveId);
@@ -68,7 +68,7 @@ namespace SplitBill.Controllers
         }
 
         [Authorize]
-        [HttpDelete("DeleteGroup/{groupId}", Name ="Delete Group")]
+        [HttpDelete("DeleteGroup/{groupId}", Name = "Delete Group")]
         public IActionResult DeleteGroup(int groupId)
         {
             _service.DeleteGroup(groupId);

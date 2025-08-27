@@ -12,6 +12,7 @@ namespace Domain.Entity
         public int LeaderId { get; set; }
         public bool IsPublic { get; set; }
         public ICollection<User> Users { get; set; } = new List<User>();
+        public virtual ICollection<Expense> Expenses { get; set; } = new List<Expense>();
 
     }
 }

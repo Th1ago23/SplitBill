@@ -6,13 +6,13 @@ using Infrastructure.Repository;
 
 namespace Infrastructure.Database
 {
-    public class UnitOfWork:IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly DbConfig _context;
 
-        public IUserRepository Users { get;}
-        public IGroupRepository Groups { get;}
-        public IExpenseRepository Expenses { get;}
+        public IUserRepository Users { get; }
+        public IGroupRepository Groups { get; }
+        public IExpenseRepository Expenses { get; }
         public UnitOfWork(DbConfig context)
         {
             _context = context;

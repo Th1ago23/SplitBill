@@ -1,5 +1,4 @@
-﻿using Domain.DTO.User;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Domain.DTO.Expense
 {
