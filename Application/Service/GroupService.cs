@@ -1,4 +1,5 @@
-﻿using Domain.DTO.Expense;
+﻿using Application.Service.Mapper;
+using Domain.DTO.Expense;
 using Domain.DTO.Group;
 using Domain.Interface.Context;
 using Domain.Interface.Database;
@@ -20,9 +21,11 @@ namespace Application.Service
         private readonly IUnitOfWork _uow;
         private readonly IUserMP _userMP;
         private readonly IExpenseMP _expenseMP;
+        private readonly GroupGeneralMapper _gmp;
 
-        public GroupService(IExpenseMP expenseMP, IUserMP userMP, IUnitOfWork uow, IGroupMP mapper, IGroupRepository gr, IUserRepository ur, ICurrentUserService acessor)
+        public GroupService(GroupGeneralMapper gmp, IExpenseMP expenseMP, IUserMP userMP, IUnitOfWork uow, IGroupMP mapper, IGroupRepository gr, IUserRepository ur, ICurrentUserService acessor)
         {
+            _gmp = gmp;
             _expenseMP = expenseMP;
             _userMP = userMP;
             _uow = uow;
@@ -169,6 +172,26 @@ namespace Application.Service
 
             await _uow.CommitAsync();
             return true;
+        }
+
+        public async Task<IEnumerable<GroupSummaryDTO>> GetAllGroupsWithMembersInContext()
+        {
+            var userInContext = await _ur.Find().FirstOrDefaultAsync(i => i.Id == _acessor.UserId) ?? throw new ArgumentNullException();
+            var group = await _gr
+                                .Find()
+                                .Include(i => i.Users)
+                                .Include(i => i.Expenses)
+                                .Where(i => i.Users.Contains(userInContext))
+                                .ToListAsync();
+            var gpFinal = new List<GroupSummaryDTO>();
+
+            foreach (var g in group)
+            {
+                var dto = new GroupSummaryDTO(g.Name, g.LeaderId, g.Users.Select(_userMP.ToSummary).ToList(), g.IsPublic, g.Expenses.Select(_gmp.ToDetail).ToList());
+                gpFinal.Add(dto);
+            }
+
+            return gpFinal;
         }
 
         public async Task<GroupSummaryDTO> RenameGroup(string newName, int groupId)

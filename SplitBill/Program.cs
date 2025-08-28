@@ -1,6 +1,7 @@
 using Application.Service;
 using Application.Service.ContextUser;
 using Application.Service.JWT;
+using Application.Service.Mapper;
 using Application.Service.Mapper.ExpenseMapper;
 using Application.Service.Mapper.GroupMapper;
 using Application.Service.Mapper.UserMapper;
@@ -40,6 +41,7 @@ builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IExpenseMP, ExpenseMP>();
+builder.Services.AddScoped<GroupGeneralMapper>();
 
 
 

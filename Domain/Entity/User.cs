@@ -19,7 +19,7 @@ namespace Domain.Entity
         public string FullName { get; set; }
 
         public DateTime Birthday { get; private set; }
-
+        
         [NotMapped]
         public int Age
         {

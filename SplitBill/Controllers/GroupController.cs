@@ -33,6 +33,14 @@ namespace SplitBill.Controllers
         }
 
         [Authorize]
+        [HttpGet("GetAllGroups")]
+        public async Task<IActionResult> GetGroups()
+        {
+            var gp = await _service.GetAllGroupsWithMembersInContext();
+            return Ok(gp);
+        }
+
+        [Authorize]
         [HttpPost("{groupId}/AddMember/{userEmail}", Name = "Add Member")]
         public async Task<IActionResult> AddMember(int groupId, string userEmail)
         {

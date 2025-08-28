@@ -1,4 +1,5 @@
 ﻿using Domain.DTO.Group;
+using Domain.DTO.User;
 using Domain.Entity;
 
 namespace Domain.Interface.Mapper.GroupMapper
@@ -7,5 +8,6 @@ namespace Domain.Interface.Mapper.GroupMapper
     {
         public Group ToEntity(GroupCreateDTO dto);
         public GroupResponseDTO ToDTO(Group gp);
+        
     }
 }

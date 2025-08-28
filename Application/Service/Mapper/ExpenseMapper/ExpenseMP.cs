@@ -33,7 +33,6 @@ namespace Application.Service.Mapper.ExpenseMapper
             _validator.Validate(expense);
 
             return new ExpenseResponseDTO(expense.Description, expense.Value);
-
         }
     }
 }
