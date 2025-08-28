@@ -110,16 +110,20 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
-        builder => builder.AllowAnyOrigin()
-                         .AllowAnyHeader()
-                         .AllowAnyMethod());
+        builder => builder
+            .WithOrigins("http://localhost:4200") // Frontend específico
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()); // Importante para JWT
 });
-
 
 
 WebApplication app = builder.Build();
 
-app.UseCors("AllowAll");
+// No Program.cs, substituir a configuração atual:
+
+// E na configuração da aplicação:
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -128,6 +132,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAllOrigins");
 
 app.UseAuthentication();
 app.UseAuthorization();

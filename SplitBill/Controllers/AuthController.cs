@@ -22,7 +22,7 @@ namespace SplitBill.Controllers
 
             var token = await _service.Login(request);
 
-            return Ok(token);
+            return Ok(new { token });
         }
 
         [HttpPost("Register")]
