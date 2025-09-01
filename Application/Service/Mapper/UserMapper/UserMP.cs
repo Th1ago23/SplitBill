@@ -1,6 +1,6 @@
-﻿using Domain.DTO.User;
+﻿using Application.DTO.User;
+using Application.Interface.Mapper.UserMapper;
 using Domain.Entity;
-using Domain.Interface.Mapper.UserMapper;
 using Domain.Interface.Utils;
 
 namespace Application.Service.Mapper.UserMapper
@@ -60,7 +60,7 @@ namespace Application.Service.Mapper.UserMapper
         public UserSummaryDTO ToSummary(User user)
         {
             _validator.Validate(user);
-            return new UserSummaryDTO(user.FullName);
+            return new UserSummaryDTO(user.Id,user.FullName);
         }
 
 

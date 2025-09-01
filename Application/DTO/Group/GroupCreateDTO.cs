@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Domain.DTO.Group
+namespace Application.DTO.Group
 {
     public record GroupCreateDTO(
         [Required]

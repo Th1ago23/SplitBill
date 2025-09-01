@@ -1,6 +1,6 @@
-﻿using Domain.DTO.Expense;
+﻿using Application.DTO.Expense;
 
-namespace Domain.Interface.Service
+namespace Application.Interface.Service
 {
     public interface IExpenseService
     {

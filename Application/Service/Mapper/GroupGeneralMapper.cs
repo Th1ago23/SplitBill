@@ -1,13 +1,9 @@
-﻿using Domain.DTO.Expense;
+﻿using Application.DTO.Expense;
+using Application.Interface.Mapper.ExpenseMapper;
+using Application.Interface.Mapper.GroupMapper;
+using Application.Interface.Mapper.UserMapper;
 using Domain.Entity;
-using Domain.Interface.Mapper.ExpenseMapper;
-using Domain.Interface.Mapper.GroupMapper;
-using Domain.Interface.Mapper.UserMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Service.Mapper
 {
@@ -26,7 +22,7 @@ namespace Application.Service.Mapper
         public ExpenseDetailDTO ToDetail (Expense ex)
         {
             if (ex == null) throw new NullReferenceException();
-            return new ExpenseDetailDTO(ex.Description, ex.Value, ex.Date, _usmp.ToSummary(ex.Payer), ex.Participants.Select(_usmp.ToSummary).ToList(), _gmp.ToDTO(ex.Group));
+            return new ExpenseDetailDTO(ex.Id,ex.Description, ex.Value, ex.Date, _usmp.ToSummary(ex.Payer), ex.Participants.Select(_usmp.ToSummary).ToList(), _gmp.ToDTO(ex.Group));
         }
 
     }

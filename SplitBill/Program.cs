@@ -1,22 +1,5 @@
-using Application.Service;
-using Application.Service.ContextUser;
-using Application.Service.JWT;
-using Application.Service.Mapper;
-using Application.Service.Mapper.ExpenseMapper;
-using Application.Service.Mapper.GroupMapper;
-using Application.Service.Mapper.UserMapper;
-using Application.Utils.Validator;
-using Domain.Interface.Context;
-using Domain.Interface.Database;
-using Domain.Interface.Mapper.ExpenseMapper;
-using Domain.Interface.Mapper.GroupMapper;
-using Domain.Interface.Mapper.UserMapper;
-using Domain.Interface.Repository;
-using Domain.Interface.Service;
-using Domain.Interface.Token;
-using Domain.Interface.Utils;
+using Application;
 using Infrastructure.Database;
-using Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -28,22 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IGroupRepository, GroupRepository>();
-builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
-builder.Services.AddScoped<IUserMP, UserMP>();
-builder.Services.AddScoped<IObjectValidator, ObjectValidator>();
-builder.Services.AddScoped<IGroupMP, GroupMP>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IGroupService, GroupService>();
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-builder.Services.AddScoped<IExpenseService, ExpenseService>();
-builder.Services.AddScoped<IExpenseMP, ExpenseMP>();
-builder.Services.AddScoped<GroupGeneralMapper>();
 
-
+ExtensionsApplicationService.AddService(builder);
 
 builder.Services.AddHttpContextAccessor();
 

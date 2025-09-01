@@ -1,8 +1,7 @@
 ﻿
-using Domain.DTO.Expense;
+using Application.DTO.Expense;
+using Application.Interface.Mapper.ExpenseMapper;
 using Domain.Entity;
-using Domain.Interface.Mapper.ExpenseMapper;
-using Domain.Interface.Mapper.UserMapper;
 using Domain.Interface.Utils;
 
 namespace Application.Service.Mapper.ExpenseMapper
@@ -32,7 +31,7 @@ namespace Application.Service.Mapper.ExpenseMapper
         {
             _validator.Validate(expense);
 
-            return new ExpenseResponseDTO(expense.Description, expense.Value);
+            return new ExpenseResponseDTO(expense.Id, expense.Description, expense.Value);
         }
     }
 }

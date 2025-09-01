@@ -1,8 +1,8 @@
-﻿using Domain.DTO.User;
+﻿using Application.DTO.User;
+using Application.Interface.Mapper.UserMapper;
+using Application.Interface.Service;
 using Domain.Interface.Database;
-using Domain.Interface.Mapper.UserMapper;
 using Domain.Interface.Repository;
-using Domain.Interface.Service;
 using Domain.Interface.Token;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,7 +40,7 @@ namespace Application.Service
 
         }
 
-        public async Task<UserResponseDTO> Register(UserRegisterDTO dto)
+        public async Task<UserRegisterResponseDTO> Register(UserRegisterDTO dto)
         {
             if (await _repo.Find().AnyAsync(i => i.Email == dto.EmailAddress)) throw new Exception("Esse e-mail já foi cadastrado.");
             if (string.IsNullOrWhiteSpace(dto.EmailAddress)) throw new ArgumentException("O e-mail é obrigatório.", nameof(dto.EmailAddress));
@@ -51,8 +51,9 @@ namespace Application.Service
             var user = _mapper.ToUser(dto, pass);
             await _repo.Add(user);
             await _work.CommitAsync();
+            var token = _token.GenerateToken(user);
 
-            return new UserResponseDTO(user.Id, user.Email, user.Username);
+            return new UserRegisterResponseDTO(user.Id, user.Email, token);
 
         }
     }

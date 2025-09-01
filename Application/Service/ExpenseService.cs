@@ -1,13 +1,13 @@
 ﻿
 
-using Domain.DTO.Expense;
+using Application.DTO.Expense;
+using Application.Interface.Mapper.ExpenseMapper;
+using Application.Interface.Mapper.GroupMapper;
+using Application.Interface.Mapper.UserMapper;
+using Application.Interface.Service;
 using Domain.Interface.Context;
 using Domain.Interface.Database;
-using Domain.Interface.Mapper.ExpenseMapper;
-using Domain.Interface.Mapper.GroupMapper;
-using Domain.Interface.Mapper.UserMapper;
 using Domain.Interface.Repository;
-using Domain.Interface.Service;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Service
@@ -56,7 +56,7 @@ namespace Application.Service
                                         .FirstOrDefaultAsync(j => j.Id == id)
                                         ?? throw new NullReferenceException("Não foi possível encontrar essa transação no grupo");
 
-            return new ExpenseDetailDTO(response.Description, response.Value, response.Date, _userMP.ToSummary(response.Payer), response.Participants.Select(_userMP.ToSummary).ToList(), _groupMP.ToDTO(response.Group));
+            return new ExpenseDetailDTO(response.Id,response.Description, response.Value, response.Date, _userMP.ToSummary(response.Payer), response.Participants.Select(_userMP.ToSummary).ToList(), _groupMP.ToDTO(response.Group));
         }
 
         public async Task<ExpenseDetailDTO> CreateExpense(int groupId, ExpenseCreateDTO dto)
@@ -96,7 +96,7 @@ namespace Application.Service
 
             await _work.CommitAsync();
 
-            return new ExpenseDetailDTO(newExpense.Description, newExpense.Value, newExpense.Date, _userMP.ToSummary(newExpense.Payer), newExpense.Participants.Select(_userMP.ToSummary).ToList(), _groupMP.ToDTO(newExpense.Group));
+            return new ExpenseDetailDTO(newExpense.Id, newExpense.Description, newExpense.Value, newExpense.Date, _userMP.ToSummary(newExpense.Payer), newExpense.Participants.Select(_userMP.ToSummary).ToList(), _groupMP.ToDTO(newExpense.Group));
         }
 
         public async Task<GroupBalanceDTO> GetGroupBalanceAsync(int groupId)

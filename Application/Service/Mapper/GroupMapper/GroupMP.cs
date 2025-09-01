@@ -1,9 +1,9 @@
 ﻿
 
-using Domain.DTO.Group;
+using Application.DTO.Group;
+using Application.Interface.Mapper.ExpenseMapper;
+using Application.Interface.Mapper.GroupMapper;
 using Domain.Entity;
-using Domain.Interface.Mapper.ExpenseMapper;
-using Domain.Interface.Mapper.GroupMapper;
 using Domain.Interface.Utils;
 
 namespace Application.Service.Mapper.GroupMapper
@@ -30,7 +30,7 @@ namespace Application.Service.Mapper.GroupMapper
         public GroupResponseDTO ToDTO(Group gp)
         {
             _validator.Validate(gp);
-            return new GroupResponseDTO(gp.Name, gp.LeaderId, gp.IsPublic);
+            return new GroupResponseDTO(gp.Id,gp.Name, gp.LeaderId, gp.IsPublic);
         }
     }
 }

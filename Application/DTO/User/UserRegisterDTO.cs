@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Domain.DTO.User
+namespace Application.DTO.User
 {
     public record UserRegisterDTO(
         [Required]

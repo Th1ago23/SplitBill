@@ -1,13 +1,13 @@
-﻿using Application.Service.Mapper;
-using Domain.DTO.Expense;
-using Domain.DTO.Group;
+﻿using Application.DTO.Expense;
+using Application.DTO.Group;
+using Application.Interface.Mapper.ExpenseMapper;
+using Application.Interface.Mapper.GroupMapper;
+using Application.Interface.Mapper.UserMapper;
+using Application.Interface.Service;
+using Application.Service.Mapper;
 using Domain.Interface.Context;
 using Domain.Interface.Database;
-using Domain.Interface.Mapper.ExpenseMapper;
-using Domain.Interface.Mapper.GroupMapper;
-using Domain.Interface.Mapper.UserMapper;
 using Domain.Interface.Repository;
-using Domain.Interface.Service;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Service
@@ -104,11 +104,11 @@ namespace Application.Service
 
             foreach (var expense in group.Expenses)
             {
-                var dto = new ExpenseDetailDTO(expense.Description, expense.Value, expense.Date, _userMP.ToSummary(expense.Payer), expense.Participants.Select(_userMP.ToSummary).ToList(), _mapper.ToDTO(group));
+                var dto = new ExpenseDetailDTO(expense.Id,expense.Description, expense.Value, expense.Date, _userMP.ToSummary(expense.Payer), expense.Participants.Select(_userMP.ToSummary).ToList(), _mapper.ToDTO(group));
                 exp.Add(dto);
             }
 
-            return new GroupSummaryDTO(group.Name, group.LeaderId, group.Users.Select(_userMP.ToSummary).ToList(), group.IsPublic, exp);
+            return new GroupSummaryDTO(group.Id,group.Name, group.LeaderId, group.Users.Select(_userMP.ToSummary).ToList(), group.IsPublic, exp);
 
         }
 
@@ -142,12 +142,12 @@ namespace Application.Service
 
             foreach (var expense in gp.Expenses)
             {
-                var dto = new ExpenseDetailDTO(expense.Description, expense.Value, expense.Date, _userMP.ToSummary(expense.Payer), expense.Participants.Select(_userMP.ToSummary).ToList(), _mapper.ToDTO(gp));
+                var dto = new ExpenseDetailDTO(expense.Id, expense.Description, expense.Value, expense.Date, _userMP.ToSummary(expense.Payer), expense.Participants.Select(_userMP.ToSummary).ToList(), _mapper.ToDTO(gp));
                 exp.Add(dto);
             }
 
 
-            return new GroupSummaryDTO(gp.Name, gp.LeaderId, gp.Users.Select(_userMP.ToSummary).ToList(), gp.IsPublic,exp);
+            return new GroupSummaryDTO(gp.Id,gp.Name, gp.LeaderId, gp.Users.Select(_userMP.ToSummary).ToList(), gp.IsPublic,exp);
 
         }
 
@@ -187,7 +187,7 @@ namespace Application.Service
 
             foreach (var g in group)
             {
-                var dto = new GroupSummaryDTO(g.Name, g.LeaderId, g.Users.Select(_userMP.ToSummary).ToList(), g.IsPublic, g.Expenses.Select(_gmp.ToDetail).ToList());
+                var dto = new GroupSummaryDTO(g.Id, g.Name, g.LeaderId, g.Users.Select(_userMP.ToSummary).ToList(), g.IsPublic, g.Expenses.Select(_gmp.ToDetail).ToList());
                 gpFinal.Add(dto);
             }
 
@@ -214,11 +214,11 @@ namespace Application.Service
 
             foreach(var expense in group.Expenses)
             {
-                var dto = new ExpenseDetailDTO(expense.Description, expense.Value, expense.Date, _userMP.ToSummary(expense.Payer), expense.Participants.Select(_userMP.ToSummary).ToList(),_mapper.ToDTO(group));
+                var dto = new ExpenseDetailDTO(expense.Id, expense.Description, expense.Value, expense.Date, _userMP.ToSummary(expense.Payer), expense.Participants.Select(_userMP.ToSummary).ToList(),_mapper.ToDTO(group));
                 novo.Add(dto);
             }
 
-            return new GroupSummaryDTO(group.Name, group.LeaderId, group.Users.Select(_userMP.ToSummary).ToList(), group.IsPublic, novo);
+            return new GroupSummaryDTO(group.Id, group.Name, group.LeaderId, group.Users.Select(_userMP.ToSummary).ToList(), group.IsPublic, novo);
 
 
         }

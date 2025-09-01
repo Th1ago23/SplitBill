@@ -1,7 +1,7 @@
-﻿using Domain.DTO.Expense;
+﻿using Application.DTO.Expense;
 using Domain.Entity;
 
-namespace Domain.Interface.Mapper.ExpenseMapper
+namespace Application.Interface.Mapper.ExpenseMapper
 {
     public interface IExpenseMP
     {

@@ -1,6 +1,6 @@
-﻿using Domain.DTO.Group;
+﻿using Application.DTO.Group;
 
-namespace Domain.Interface.Service
+namespace Application.Interface.Service
 {
     public interface IGroupService
     {

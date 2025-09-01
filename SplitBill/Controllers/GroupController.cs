@@ -1,5 +1,5 @@
-﻿using Domain.DTO.Group;
-using Domain.Interface.Service;
+﻿using Application.DTO.Group;
+using Application.Interface.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,8 +33,8 @@ namespace SplitBill.Controllers
         }
 
         [Authorize]
-        [HttpGet("GetAllGroups")]
-        public async Task<IActionResult> GetGroups()
+        [HttpGet("GetAllGroupsWithMembers")]
+        public async Task<IActionResult> GetGroupsWithMembers()
         {
             var gp = await _service.GetAllGroupsWithMembersInContext();
             return Ok(gp);

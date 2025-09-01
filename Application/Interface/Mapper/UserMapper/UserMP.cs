@@ -1,7 +1,8 @@
-﻿using Domain.DTO.User;
+﻿
+using Application.DTO.User;
 using Domain.Entity;
 
-namespace Domain.Interface.Mapper.UserMapper
+namespace Application.Interface.Mapper.UserMapper
 {
     public interface IUserMP
     {

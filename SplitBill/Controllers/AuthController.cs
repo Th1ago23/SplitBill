@@ -1,5 +1,6 @@
-﻿using Domain.DTO.User;
-using Domain.Interface.Service;
+﻿using Application.DTO.User;
+using Application.Interface.Service;
+using Domain.Interface.Token;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SplitBill.Controllers
@@ -9,9 +10,11 @@ namespace SplitBill.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IUserService _service;
+        private readonly ITokenService _token;
 
-        public AuthController(IUserService service)
+        public AuthController(ITokenService token, IUserService service)
         {
+            _token = token;
             _service = service;
         }
 
@@ -28,15 +31,24 @@ namespace SplitBill.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register(UserRegisterDTO request)
         {
-            if (request == null) return BadRequest("Preencha todos os dados");
-            await _service.Register(request);
+            try
+            {
+                if (request == null) return BadRequest("Preencha todos os dados");
 
-            return CreatedAtAction(
-                "Register",
-                new { message = "Usuário criado com Sucesso.",
-                    data = request
-                    }
-                );
+                var response = await _service.Register(request);
+
+                return Ok(response);
+            }
+
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new { error = ex.Message });
+            }
         }
     }
 }
+    

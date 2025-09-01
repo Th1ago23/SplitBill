@@ -1,5 +1,5 @@
-﻿using Domain.DTO.Expense;
-using Domain.Interface.Service;
+﻿using Application.DTO.Expense;
+using Application.Interface.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

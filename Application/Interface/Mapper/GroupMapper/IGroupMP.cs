@@ -1,8 +1,8 @@
-﻿using Domain.DTO.Group;
-using Domain.DTO.User;
+﻿
+using Application.DTO.Group;
 using Domain.Entity;
 
-namespace Domain.Interface.Mapper.GroupMapper
+namespace Application.Interface.Mapper.GroupMapper
 {
     public interface IGroupMP
     {
