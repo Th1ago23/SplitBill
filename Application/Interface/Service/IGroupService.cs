@@ -12,6 +12,7 @@ namespace Application.Interface.Service
         public Task<GroupSummaryDTO> RemoveMember(int groupId, int userId);
         public Task<bool> DeleteGroup(int groupId);
         public Task<GroupSummaryDTO> RenameGroup(string name, int groupId);
+        public Task<GroupSummaryDTO> GetGroupById(int id);
 
 
     }

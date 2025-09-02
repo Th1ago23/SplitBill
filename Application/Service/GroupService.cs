@@ -223,5 +223,25 @@ namespace Application.Service
 
         }
 
+        public async Task<GroupSummaryDTO> GetGroupById (int id)
+        {
+            var gp = await _gr
+                             .Find()
+                             .Include(i => i.Users)
+                             .Include(i => i.Expenses)
+                             .FirstOrDefaultAsync(i => i.Id == id)
+                             ?? throw new NullReferenceException();
+
+            var expenses = new List<ExpenseDetailDTO>();
+
+            foreach( var ex in gp.Expenses)
+            {
+                var dto = new ExpenseDetailDTO(ex.Id, ex.Description, ex.Value, ex.Date, _userMP.ToSummary(ex.Payer), ex.Participants.Select(_userMP.ToSummary).ToList(), _mapper.ToDTO(gp));
+                expenses.Add(dto);
+            }
+
+            return new GroupSummaryDTO(gp.Id, gp.Name, gp.LeaderId, gp.Users.Select(_userMP.ToSummary).ToList(), gp.IsPublic, expenses);
+        }
+
     }
 }
