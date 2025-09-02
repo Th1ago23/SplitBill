@@ -76,15 +76,6 @@ namespace SplitBill.Controllers
         }
 
         [Authorize]
-        [HttpGet("GetGroupName", Name = "Get Group Name")]
-        public async Task<IActionResult> GetGroupName(int gpId)
-        {
-            var gpName = await _service.GetGroupName(gpId);
-
-            return Ok(gpName);
-        }
-
-        [Authorize]
         [HttpDelete("{groupId}/RemoveMember/{userToRemoveId}", Name = "Remove Member")]
         public async Task<IActionResult> RemoveMember(int groupId, int userToRemoveId)
         {

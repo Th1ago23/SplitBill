@@ -4,6 +4,7 @@ namespace Domain.Interface.Token
 {
     public interface ITokenService
     {
-        string GenerateToken(User user);
+        public string GenerateToken(User user);
+        public string GenerateInviteToken(int userId, int groupId)
     }
 }

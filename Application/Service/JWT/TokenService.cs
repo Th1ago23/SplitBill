@@ -44,5 +44,31 @@ namespace Application.Service.JWT
 
             return tokenHandler.WriteToken(token);
         }
+        public string GenerateInviteToken(int userId, int groupId)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]);
+
+            var claims = new List<Claim>
+            {
+                new Claim("inviteId", Guid.NewGuid().ToString()),
+                new Claim("userId", userId.ToString()),
+                new Claim("groupId", groupId.ToString())
+            };
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddDays(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Issuer = _config["Jwt:Issuer"],
+                Audience = _config["Jwt:Audience"]
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
+
     }
 }

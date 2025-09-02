@@ -56,5 +56,6 @@ namespace Application.Service
             return new UserRegisterResponseDTO(user.Id, user.Email, token);
 
         }
+
     }
 }
