@@ -22,18 +22,20 @@ namespace Application.Service
             _token = token;
         }
 
-        public async Task<string> CreateInvite (int groupId, int userId)
+        public async Task<string> CreateInvite (int groupId, int userId, InviteExpirationTime time )
         {
             var gp = await _groupRepository.Find().FirstOrDefaultAsync(i => i.Id == groupId) ?? throw new NullReferenceException("Grupo não encontrado");
             var user = await _userRepository.Find().FirstOrDefaultAsync(i => i.Id == userId) ?? throw new NullReferenceException("Usuário não econtrado");
 
             if (!gp.IsPublic && gp.LeaderId != user.Id) throw new UnauthorizedAccessException("Sem permissão para convidar outros usuários");
+            var expiration = InviteExtensions.ToTime(time);
 
 
-            var obj = new Invite(Guid.NewGuid(), gp.Id, user.Id, DateTime.UtcNow.AddDays(1));
+            var invite = new Invite(Guid.NewGuid(), gp.Id, user.Id,expiration);
 
-            var token = _token.GenerateInviteToken(userId, groupId);
-            
+            var token = _token.GenerateInviteToken(invite);
+
+            return token;
         }
     }
 }

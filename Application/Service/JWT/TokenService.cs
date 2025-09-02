@@ -1,4 +1,5 @@
 ﻿using Domain.Entity;
+using Domain.Helpers;
 using Domain.Interface.Token;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -44,22 +45,21 @@ namespace Application.Service.JWT
 
             return tokenHandler.WriteToken(token);
         }
-        public string GenerateInviteToken(int userId, int groupId)
+        public string GenerateInviteToken(Invite invite)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]);
-
             var claims = new List<Claim>
             {
-                new Claim("inviteId", Guid.NewGuid().ToString()),
-                new Claim("userId", userId.ToString()),
-                new Claim("groupId", groupId.ToString())
+                new Claim("InviteId", invite.Id.ToString()),
+                new Claim("UserId", invite.UserId.ToString()),
+                new Claim("GroupId", invite.GroupId.ToString())
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddDays(1),
+                Expires = InviteExtensions.ToTime(invite.Time),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 Issuer = _config["Jwt:Issuer"],
                 Audience = _config["Jwt:Audience"]
