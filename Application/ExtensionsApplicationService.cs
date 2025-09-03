@@ -19,6 +19,7 @@ using Application.Interface.Mapper.UserMapper;
 using Application.Interface.Mapper.GroupMapper;
 using Application.Interface.Mapper.ExpenseMapper;
 using Microsoft.AspNetCore.Builder;
+using Application.Interface.Utils;
 
 
 namespace Application
@@ -41,6 +42,7 @@ namespace Application
             builder.Services.AddScoped<IExpenseService, ExpenseService>();
             builder.Services.AddScoped<IExpenseMP, ExpenseMP>();
             builder.Services.AddScoped<GroupGeneralMapper>();
+            builder.Services.AddScoped<IInvitationService, InvitationService>();
         }
     }
 }

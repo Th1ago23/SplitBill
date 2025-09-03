@@ -68,7 +68,32 @@ namespace Application.Service.JWT
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+        public ClaimsPrincipal ValidateToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]);
 
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true
+            };
 
+            try
+            {
+                return tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
+            }
+            catch (SecurityTokenExpiredException)
+            {
+                throw new UnauthorizedAccessException("O convite expirou");
+            }
+            catch (SecurityTokenException)
+            {
+                throw new UnauthorizedAccessException("Token de invite inválido");
+            }
+        }
     }
 }
